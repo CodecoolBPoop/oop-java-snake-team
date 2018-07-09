@@ -17,10 +17,14 @@ import javax.swing.*;
 
 public class SnakeHead extends GameEntity implements Animatable {
 
-    private static final float speed = 2;
     private static final float turnRate = 2;
+    private static final int initialSpeed = 2;
+    private static final int speedUpSpeed = 4;
+    private static final int speedUpTime = 300;
     private GameEntity tail; // the last element. Needed to know where to add the next part.
+    private int speed = initialSpeed;
     private int health;
+    private int highSpeedTimer = 0;
     private int length = 0;
 
 
@@ -47,7 +51,7 @@ public class SnakeHead extends GameEntity implements Animatable {
         }
         // set rotation and position
         setRotate(dir);
-        Point2D heading = Utils.directionToVector(dir, speed);
+        Point2D heading = Utils.directionToVector(dir, this.speed);
         setX(getX() + heading.getX());
         setY(getY() + heading.getY());
 
@@ -70,6 +74,16 @@ public class SnakeHead extends GameEntity implements Animatable {
 
 
         }
+
+        if ( this.speed != initialSpeed){
+            if (this.highSpeedTimer == 0)
+                this.highSpeedTimer = speedUpTime;
+            else if (this.highSpeedTimer == 10)
+                this.speed--;
+            else if (this.highSpeedTimer == 1)
+                this.speed = initialSpeed;
+            this.highSpeedTimer--;
+        }
     }
 
     public void addPart(int numParts) {
@@ -85,4 +99,6 @@ public class SnakeHead extends GameEntity implements Animatable {
         health += diff;
     }
 
+
+    public void speedUp() { this.speed = speedUpSpeed;}
 }
