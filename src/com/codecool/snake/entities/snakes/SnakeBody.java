@@ -7,6 +7,8 @@ import com.sun.javafx.geom.Vec2d;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -15,7 +17,7 @@ public class SnakeBody extends GameEntity implements Animatable {
 
     private GameEntity parent;
     private Queue<Vec2d> history = new LinkedList<>();
-    private static final int historySize = 10;
+    private static final int historySize = 3;
 
     public SnakeBody(Pane pane, GameEntity parent) {
         super(pane);
@@ -28,8 +30,7 @@ public class SnakeBody extends GameEntity implements Animatable {
 
         double xc = parent.getX();
         double yc = parent.getY();
-        setX(xc);
-        setY(yc);
+
         for (int i = 0; i < historySize; i++) {
             history.add(new Vec2d(xc, yc));
         }
