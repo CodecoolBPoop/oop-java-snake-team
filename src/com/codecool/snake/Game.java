@@ -59,6 +59,7 @@ public class Game extends Pane {
     public void restartGame() {
         for (GameEntity gameObject : Globals.gameObjects) gameObject.destroy();
         spawnEntities();
+    }
 
     public static void gameOver(int length) {
         Stage gameOver = new Stage();
