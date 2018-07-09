@@ -7,17 +7,20 @@ import com.codecool.snake.Utils;
 import com.codecool.snake.entities.Interactable;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
+import java.util.Random;
 
 public class SnakeHead extends GameEntity implements Animatable {
 
     private static final float turnRate = 2;
     private static final int initialSpeed = 2;
     private static final int speedUpSpeed = 4;
-    private static final int speedUpTime = 300;
+    private static final int powerupTime = 500;
     private GameEntity tail; // the last element. Needed to know where to add the next part.
     private int speed = initialSpeed;
     private int health;
     private int highSpeedTimer = 0;
+    private int drunkTimer = 0;
+    private int drunkAngle;
 
     public SnakeHead(Pane pane, int xc, int yc) {
         super(pane);
@@ -33,6 +36,17 @@ public class SnakeHead extends GameEntity implements Animatable {
 
     public void step() {
         double dir = getRotate();
+
+        //drunk feature
+        if (this.drunkTimer != 0){
+            Random rand = new Random();
+            if (this.drunkTimer % 20 == 0)
+                this.drunkAngle = (rand.nextInt(4) - 1) * 2;
+            this.drunkTimer--;
+            System.out.println(this.drunkAngle);
+            dir += drunkAngle;
+        }
+
         if (Globals.leftKeyDown) {
             dir = dir - turnRate;
         }
@@ -64,13 +78,14 @@ public class SnakeHead extends GameEntity implements Animatable {
 
         if ( this.speed != initialSpeed){
             if (this.highSpeedTimer == 0)
-                this.highSpeedTimer = speedUpTime;
+                this.highSpeedTimer = powerupTime;
             else if (this.highSpeedTimer == 10)
                 this.speed--;
             else if (this.highSpeedTimer == 1)
                 this.speed = initialSpeed;
             this.highSpeedTimer--;
         }
+
     }
 
     public void addPart(int numParts) {
@@ -85,4 +100,6 @@ public class SnakeHead extends GameEntity implements Animatable {
     }
 
     public void speedUp() { this.speed = speedUpSpeed;}
+
+    public void drunk() { this.drunkTimer = powerupTime;}
 }
