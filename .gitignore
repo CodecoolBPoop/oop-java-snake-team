@@ -91,3 +91,7 @@ hs_err_pid*
 
 
 # End of https://www.gitignore.io/api/intellij,java
+
+\.idea/
+
+*.iml
