@@ -1,6 +1,7 @@
 package com.codecool.snake;
 
 import com.codecool.snake.entities.GameEntity;
+import com.codecool.snake.entities.enemies.ExplodingEnemy;
 import com.codecool.snake.entities.enemies.SimpleEnemy;
 import com.codecool.snake.entities.powerups.DrunkPowerup;
 import com.codecool.snake.entities.powerups.LifePowerup;
@@ -22,6 +23,8 @@ public class Game extends Pane {
         new SimpleEnemy(this);
         new SimpleEnemy(this);
         new SimpleEnemy(this);
+
+        new ExplodingEnemy(this);
 
         new SimplePowerup(this);
         new SimplePowerup(this);
