@@ -42,7 +42,7 @@ public class Game extends Pane {
         new DrunkPowerup(this);
     }
 
-    public void start() {
+    void start() {
         spawnEntities();
         Scene scene = getScene();
         scene.setOnKeyPressed(event -> {
@@ -71,7 +71,7 @@ public class Game extends Pane {
         });
 
         setTimerForSpawningEntities();
-        Globals.gameLoop = new GameLoop();
+        Globals.gameLoop = new GameLoop(this);
         Globals.gameLoop.start();
     }
 
@@ -106,7 +106,7 @@ public class Game extends Pane {
         }
     }
 
-    public void restartGame() {
+    private void restartGame() {
         for (GameEntity gameObject : Globals.gameObjects) gameObject.destroy();
         spawnEntities();
     }
