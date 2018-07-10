@@ -6,9 +6,13 @@ import com.codecool.snake.Globals;
 import com.codecool.snake.entities.Animatable;
 import com.codecool.snake.Utils;
 import com.codecool.snake.entities.Interactable;
+import com.codecool.snake.entities.weapon.Bullet;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 import java.util.Random;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -20,28 +24,48 @@ public class SnakeHead extends GameEntity implements Animatable {
     private static final int initialSpeed = 2;
     private static final int speedUpSpeed = 4;
     private static final int powerupTime = 500;
+    private int shotTimer = 5;
+    private static Pane mainPane;
     private GameEntity tail; // the last element. Needed to know where to add the next part.
     private int speed = initialSpeed;
     private int health;
     private int highSpeedTimer = 0;
     private int drunkTimer = 0;
     private int drunkAngle;
+    private boolean imageChanged = false;
+    private Clip shotSound;
+    private Clip shotSoundReverb;
     private int length = 0;
 
 
     public SnakeHead(Pane pane, int xc, int yc) {
         super(pane);
+        mainPane = pane;
         setX(xc);
         setY(yc);
         health = 100;
         tail = this;
         setImage(Globals.snakeHead);
         pane.getChildren().add(this);
-
+        try {
+            this.openAudio();
+        }
+        catch (Exception e){
+            System.out.println("Failed to open audio");
+        }
         addPart(4);
     }
 
-    public void step() {
+    private void openAudio() throws Exception{
+        AudioInputStream audioIn = AudioSystem.getAudioInputStream(getClass().getResource("/shot.wav"));
+        this.shotSound = AudioSystem.getClip();
+        this.shotSound.open(audioIn);
+        audioIn = AudioSystem.getAudioInputStream(getClass().getResource("/shot_reverb.wav"));
+        this.shotSoundReverb = AudioSystem.getClip();
+        this.shotSoundReverb.open(audioIn);
+    }
+
+    public void step(){
         double dir = getRotate();
 
         //drunk feature
@@ -60,6 +84,29 @@ public class SnakeHead extends GameEntity implements Animatable {
         if (Globals.rightKeyDown) {
             dir = dir + turnRate;
         }
+
+        if (Globals.spaceKeyDown) {
+            this.shotTimer--;
+            if (!this.imageChanged){
+                this.shotSound.loop(Clip.LOOP_CONTINUOUSLY);
+                setImage(Globals.snakeHeadShot);
+                this.imageChanged = true;
+                new Bullet(pane, getX(), getY(), getRotate());
+            }
+            if (this.shotTimer == 1)
+                new Bullet(pane, getX(), getY(), getRotate());
+            else if (this.shotTimer == 0)
+                this.shotTimer = 5;
+        }
+        else if (!Globals.spaceKeyDown && this.imageChanged) {
+            this.shotTimer = 5;
+            this.shotSound.stop();
+            this.shotSoundReverb.setMicrosecondPosition(0);
+            this.shotSoundReverb.loop(1);
+            setImage(Globals.snakeHead);
+            this.imageChanged = false;
+        }
+
         // set rotation and position
         setRotate(dir);
         Point2D heading = Utils.directionToVector(dir, this.speed);
