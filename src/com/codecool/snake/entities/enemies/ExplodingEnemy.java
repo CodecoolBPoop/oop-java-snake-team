@@ -13,21 +13,21 @@ import java.util.Random;
 
 
 public class ExplodingEnemy extends GameEntity implements Animatable, Interactable {
-
+    Random rnd = new Random();
     private Point2D heading;
     private static final int damage = 10;
+    private double direction = rnd.nextDouble() * 360;
+    private int speed = 2;
 
     public ExplodingEnemy(Pane pane) {
         super(pane);
 
         setImage(Globals.explodingEnemy);
         pane.getChildren().add(this);
-        int speed = 2;
-        Random rnd = new Random();
+
         setX(rnd.nextDouble() * Globals.WINDOW_WIDTH);
         setY(rnd.nextDouble() * Globals.WINDOW_HEIGHT);
 
-        double direction = rnd.nextDouble() * 360;
         setRotate(direction);
         heading = Utils.directionToVector(direction, speed);
     }
@@ -35,7 +35,9 @@ public class ExplodingEnemy extends GameEntity implements Animatable, Interactab
     @Override
     public void step() {
         if (isOutOfBounds()) {
-            destroy();
+            direction = direction * (- 1);
+            setRotate(direction);
+            heading = Utils.directionToVector(direction, speed);
         }
         setX(getX() + heading.getX());
         setY(getY() + heading.getY());
