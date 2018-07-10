@@ -29,4 +29,6 @@ public abstract class GameEntity extends ImageView {
         }
         return false;
     }
+
+    public int getHealth() {return 0;}
 }
