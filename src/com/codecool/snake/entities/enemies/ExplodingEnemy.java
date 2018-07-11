@@ -32,12 +32,36 @@ public class ExplodingEnemy extends GameEntity implements Animatable, Interactab
         heading = Utils.directionToVector(direction, speed);
     }
 
+    private void bounceFromSideWalls(){
+        direction = direction * -1;
+        setRotate(direction);
+        heading = Utils.directionToVector(direction, speed);
+    }
+
+    private void bounceFromTopWalls() {
+        direction = direction * 2;
+        setRotate(direction);
+        heading = Utils.directionToVector(direction, speed);
+    }
+
     @Override
     public void step() {
         if (isOutOfBounds()) {
-            direction = direction * (- 1);
-            setRotate(direction);
-            heading = Utils.directionToVector(direction, speed);
+            if (isOutOfBounds()) {
+                if(getX() < 0) {
+                    setX(1);
+                    bounceFromSideWalls();
+                } else if (getX() > 1000 ) {
+                    setX(999);
+                    bounceFromSideWalls();
+                } else if(getY() > 700) {
+                    setY(680);
+                    bounceFromTopWalls();
+                } else if (getY() < 0) {
+                    setY(20);
+                    bounceFromTopWalls();
+                }
+            }
         }
         setX(getX() + heading.getX());
         setY(getY() + heading.getY());
