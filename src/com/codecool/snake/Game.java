@@ -3,6 +3,8 @@ package com.codecool.snake;
 import com.codecool.snake.entities.GameEntity;
 import com.codecool.snake.entities.enemies.ExplodingEnemy;
 import com.codecool.snake.entities.enemies.SimpleEnemy;
+import com.codecool.snake.entities.menu.MultiPlayer;
+import com.codecool.snake.entities.menu.SinglePlayer;
 import com.codecool.snake.entities.powerups.DrunkPowerup;
 import com.codecool.snake.entities.powerups.LifePowerup;
 import com.codecool.snake.entities.powerups.SimplePowerup;
@@ -11,8 +13,6 @@ import com.codecool.snake.entities.snakes.SnakeHead;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -28,9 +28,13 @@ import javax.sound.sampled.Clip;
 public class Game extends Pane {
 
     private double elapsedMillis;
+    private int numOfPlayers;
+    private int player1length;
+    private int player2length;
+    private int initNumOfPlayers;
 
     private void spawnEntities() {
-        new SnakeHead(this, this, 500, 500);
+        new SnakeHead(this, this, 750, 500, 1);
 
         new SimpleEnemy(this);
         new SimpleEnemy(this);
@@ -51,7 +55,13 @@ public class Game extends Pane {
         new DrunkPowerup(this);
     }
 
+    private void spawnPlayerTwo(){
+        new SnakeHead(this, this, 250, 500, 2);
+    }
+
     void start() {
+
+        Globals.startGame = this;
 
         try{
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(getClass().getResource("/techno.wav"));
@@ -63,7 +73,7 @@ public class Game extends Pane {
             System.out.print("failed to load techno");
         }
 
-        spawnEntities();
+
         Scene scene = getScene();
         scene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
@@ -73,8 +83,17 @@ public class Game extends Pane {
                 case RIGHT:
                     Globals.rightKeyDown = true;
                     break;
-                case SPACE:
-                    Globals.spaceKeyDown = true;
+                case DOWN:
+                    Globals.downKeyDown = true;
+                    break;
+                case A:
+                    Globals.AKeyDown = true;
+                    break;
+                case S:
+                    Globals.SKeyDown = true;
+                    break;
+                case D:
+                    Globals.DKeyDown = true;
                     break;
             }
         });
@@ -87,8 +106,17 @@ public class Game extends Pane {
                 case RIGHT:
                     Globals.rightKeyDown = false;
                     break;
-                case SPACE:
-                    Globals.spaceKeyDown = false;
+                case DOWN:
+                    Globals.downKeyDown = false;
+                    break;
+                case A:
+                    Globals.AKeyDown = false;
+                    break;
+                case S:
+                    Globals.SKeyDown = false;
+                    break;
+                case D:
+                    Globals.DKeyDown = false;
                     break;
                 case R:
                     restartGame();
@@ -96,9 +124,25 @@ public class Game extends Pane {
             }
         });
 
-        setTimerForSpawningEntities();
+        new SnakeHead(this, this, 500, 500, 1);
+        new SinglePlayer(this);
+        new MultiPlayer(this);
         Globals.gameLoop = new GameLoop(this);
         Globals.gameLoop.start();
+    }
+
+    public void startGame(){
+        for (GameEntity gameObject : Globals.gameObjects) gameObject.destroy();
+        if (Globals.isMultiplayer){
+            spawnPlayerTwo();
+            numOfPlayers = 2;
+            initNumOfPlayers = 2;
+        } else {
+            numOfPlayers = 1;
+            initNumOfPlayers = 1;
+        }
+        spawnEntities();
+        setTimerForSpawningEntities();
     }
 
     private void setTimerForSpawningEntities() {
@@ -135,13 +179,39 @@ public class Game extends Pane {
     private void restartGame() {
         for (GameEntity gameObject : Globals.gameObjects) gameObject.destroy();
         spawnEntities();
+        if (initNumOfPlayers == 2) spawnPlayerTwo();
+        numOfPlayers = initNumOfPlayers;
+        Globals.rightKeyDown = false;
+        Globals.leftKeyDown = false;
+        Globals.downKeyDown = false;
+        Globals.AKeyDown = false;
+        Globals.SKeyDown = false;
+        Globals.DKeyDown = false;
         Globals.gameLoop.start();
     }
 
-    public void gameOver(int length) {
+    public void playerDied(SnakeHead player, int length) {
+        if (player.getPlayer() == 1) player1length = length;
+        else player2length = length;
+        numOfPlayers--;
+
+        if (numOfPlayers == 0) gameOver();
+    }
+
+    public void gameOver() {
+        Globals.gameLoop.stop();
+
         Stage gameOver = new Stage();
-        gameOver.setTitle("Your game is over");
-        Text text = new Text(50, 50, "Game over \nSnake's length: " + length);
+        gameOver.setTitle("GAME OVER!");
+
+        String gameOverTitle;
+        if (initNumOfPlayers == 2) {
+            gameOverTitle = "Length of Player 1: " + player1length + "\nLength of Player 2: " + player2length;
+        } else {
+            gameOverTitle = "Length of the Snake: " + player1length;
+        }
+
+        Text text = new Text(50, 50, gameOverTitle);
         StackPane root = new StackPane();
         root.getChildren().add(text);
 

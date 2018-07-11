@@ -15,10 +15,12 @@ import java.util.Random;
 public class Bullet extends GameEntity implements Animatable, Interactable {
 
     private Point2D heading;
+    private int player;
 
-    public Bullet(Pane pane, double x, double y, double direction) {
+    public Bullet(Pane pane, double x, double y, double direction, int player) {
         super(pane);
 
+        this.player = player;
         setImage(Globals.bullet);
         pane.getChildren().add(this);
         int speed = 10;
@@ -46,12 +48,15 @@ public class Bullet extends GameEntity implements Animatable, Interactable {
     }
 
     @Override
-    public void apply(SnakeHead player) {
-        System.out.print("ads");
+    public void apply(SnakeHead snakeHead) {
+        if (snakeHead.getPlayer() != player) {
+            snakeHead.changeHealth(-1);
+            this.destroy();
+        }
     }
 
     @Override
     public String getMessage() {
-        return "shot";
+        return "Shot by player " + player;
     }
 }
