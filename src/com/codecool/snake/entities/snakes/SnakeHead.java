@@ -132,10 +132,7 @@ public class SnakeHead extends GameEntity implements Animatable {
 
         // check for game over condition
         if (isOutOfBounds() || health <= 0) {
-            System.out.println("Game Over" + this.length);
-            Globals.gameLoop.stop();
-            this.destroy();
-            game.gameOver(length);
+            dies();
         }
 
         if ( this.speed != initialSpeed){
@@ -148,6 +145,12 @@ public class SnakeHead extends GameEntity implements Animatable {
             this.highSpeedTimer--;
         }
 
+    }
+
+    public void dies() {
+        this.destroy();
+        System.out.println("Player " + player + " died. Length: " + this.length);
+        game.playerDied(this, length);
     }
 
     public void addPart(int numParts) {

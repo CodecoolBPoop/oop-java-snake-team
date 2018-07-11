@@ -10,12 +10,9 @@ import com.codecool.snake.entities.powerups.LifePowerup;
 import com.codecool.snake.entities.powerups.SimplePowerup;
 import com.codecool.snake.entities.powerups.SpeedPowerup;
 import com.codecool.snake.entities.snakes.SnakeHead;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -31,6 +28,10 @@ import javax.sound.sampled.Clip;
 public class Game extends Pane {
 
     private double elapsedMillis;
+    private int numOfPlayers;
+    private int player1length;
+    private int player2length;
+    private int initNumOfPlayers;
 
     private void spawnEntities() {
         new SnakeHead(this, this, 750, 500, 1);
@@ -134,6 +135,11 @@ public class Game extends Pane {
         for (GameEntity gameObject : Globals.gameObjects) gameObject.destroy();
         if (Globals.isMultiplayer){
             spawnPlayerTwo();
+            numOfPlayers = 2;
+            initNumOfPlayers = 2;
+        } else {
+            numOfPlayers = 1;
+            initNumOfPlayers = 1;
         }
         spawnEntities();
         setTimerForSpawningEntities();
@@ -173,6 +179,8 @@ public class Game extends Pane {
     private void restartGame() {
         for (GameEntity gameObject : Globals.gameObjects) gameObject.destroy();
         spawnEntities();
+        if (initNumOfPlayers == 2) spawnPlayerTwo();
+        numOfPlayers = initNumOfPlayers;
         Globals.rightKeyDown = false;
         Globals.leftKeyDown = false;
         Globals.downKeyDown = false;
@@ -182,10 +190,28 @@ public class Game extends Pane {
         Globals.gameLoop.start();
     }
 
-    public void gameOver(int length) {
+    public void playerDied(SnakeHead player, int length) {
+        if (player.getPlayer() == 1) player1length = length;
+        else player2length = length;
+        numOfPlayers--;
+
+        if (numOfPlayers == 0) gameOver();
+    }
+
+    public void gameOver() {
+        Globals.gameLoop.stop();
+
         Stage gameOver = new Stage();
         gameOver.setTitle("GAME OVER!");
-        Text text = new Text(50, 50, "Game over \nSnake's length: " + length);
+
+        String gameOverTitle;
+        if (initNumOfPlayers == 2) {
+            gameOverTitle = "Length of Player 1: " + player1length + "\nLength of Player 2: " + player2length;
+        } else {
+            gameOverTitle = "Length of the Snake: " + player1length;
+        }
+
+        Text text = new Text(50, 50, gameOverTitle);
         StackPane root = new StackPane();
         root.getChildren().add(text);
 
