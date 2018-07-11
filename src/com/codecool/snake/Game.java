@@ -3,11 +3,14 @@ package com.codecool.snake;
 import com.codecool.snake.entities.GameEntity;
 import com.codecool.snake.entities.enemies.ExplodingEnemy;
 import com.codecool.snake.entities.enemies.SimpleEnemy;
+import com.codecool.snake.entities.menu.MultiPlayer;
+import com.codecool.snake.entities.menu.SinglePlayer;
 import com.codecool.snake.entities.powerups.DrunkPowerup;
 import com.codecool.snake.entities.powerups.LifePowerup;
 import com.codecool.snake.entities.powerups.SimplePowerup;
 import com.codecool.snake.entities.powerups.SpeedPowerup;
 import com.codecool.snake.entities.snakes.SnakeHead;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -31,7 +34,6 @@ public class Game extends Pane {
 
     private void spawnEntities() {
         new SnakeHead(this, this, 750, 500, 1);
-        new SnakeHead(this, this, 250, 500, 2);
 
         new SimpleEnemy(this);
         new SimpleEnemy(this);
@@ -52,7 +54,13 @@ public class Game extends Pane {
         new DrunkPowerup(this);
     }
 
+    private void spawnPlayerTwo(){
+        new SnakeHead(this, this, 250, 500, 2);
+    }
+
     void start() {
+
+        Globals.startGame = this;
 
         try{
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(getClass().getResource("/techno.wav"));
@@ -64,7 +72,7 @@ public class Game extends Pane {
             System.out.print("failed to load techno");
         }
 
-        spawnEntities();
+
         Scene scene = getScene();
         scene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
@@ -115,9 +123,20 @@ public class Game extends Pane {
             }
         });
 
-        setTimerForSpawningEntities();
+        new SnakeHead(this, this, 500, 500, 1);
+        new SinglePlayer(this);
+        new MultiPlayer(this);
         Globals.gameLoop = new GameLoop(this);
         Globals.gameLoop.start();
+    }
+
+    public void startGame(){
+        for (GameEntity gameObject : Globals.gameObjects) gameObject.destroy();
+        if (Globals.isMultiplayer){
+            spawnPlayerTwo();
+        }
+        spawnEntities();
+        setTimerForSpawningEntities();
     }
 
     private void setTimerForSpawningEntities() {
@@ -154,6 +173,12 @@ public class Game extends Pane {
     private void restartGame() {
         for (GameEntity gameObject : Globals.gameObjects) gameObject.destroy();
         spawnEntities();
+        Globals.rightKeyDown = false;
+        Globals.leftKeyDown = false;
+        Globals.downKeyDown = false;
+        Globals.AKeyDown = false;
+        Globals.SKeyDown = false;
+        Globals.DKeyDown = false;
         Globals.gameLoop.start();
     }
 

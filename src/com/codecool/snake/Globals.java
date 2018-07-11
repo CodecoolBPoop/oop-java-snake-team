@@ -26,6 +26,8 @@ public class Globals {
     public static Image powerupLife = new Image("powerup_life.png");
     public static Image powerupDrunk = new Image("powerup_drunk.png");
     public static Image bullet = new Image("bullet.png");
+    public static Image singlePlayer = new Image("single_player.png");
+    public static Image multiPlayer = new Image("multi_player.png");
     public static Image snakeHead2 = new Image("snake_head2.png");
     public static Image snakeBody2 = new Image("snake_body2.png");
     //.. put here the other images you want to use
@@ -40,6 +42,9 @@ public class Globals {
     public static List<GameEntity> newGameObjects; // Holds game objects crated in this frame.
     public static List<GameEntity> oldGameObjects; // Holds game objects that will be destroyed this frame.
     public static GameLoop gameLoop;
+    public static Game startGame;
+
+    public static boolean isMultiplayer = false;
 
     static {
         gameObjects = new LinkedList<>();
