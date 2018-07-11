@@ -10,7 +10,10 @@ import com.codecool.snake.entities.snakes.SnakeHead;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -23,7 +26,7 @@ public class Game extends Pane {
     private double elapsedMillis;
 
     private void spawnEntities() {
-        new SnakeHead(this, 500, 500);
+        new SnakeHead(this, this, 500, 500);
 
         new SimpleEnemy(this);
         new SimpleEnemy(this);
@@ -47,17 +50,32 @@ public class Game extends Pane {
         Scene scene = getScene();
         scene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
-                case LEFT:  Globals.leftKeyDown  = true; break;
-                case RIGHT: Globals.rightKeyDown  = true; break;
-                case SPACE: Globals.spaceKeyDown = true; break;
+                case LEFT:
+                    Globals.leftKeyDown = true;
+                    break;
+                case RIGHT:
+                    Globals.rightKeyDown = true;
+                    break;
+                case SPACE:
+                    Globals.spaceKeyDown = true;
+                    break;
             }
         });
 
         scene.setOnKeyReleased(event -> {
             switch (event.getCode()) {
-                case LEFT:  Globals.leftKeyDown  = false; break;
-                case RIGHT: Globals.rightKeyDown  = false; break;
-                case SPACE: Globals.spaceKeyDown = false; break;
+                case LEFT:
+                    Globals.leftKeyDown = false;
+                    break;
+                case RIGHT:
+                    Globals.rightKeyDown = false;
+                    break;
+                case SPACE:
+                    Globals.spaceKeyDown = false;
+                    break;
+                case R:
+                    restartGame();
+                    break;
             }
         });
 
@@ -100,14 +118,34 @@ public class Game extends Pane {
     private void restartGame() {
         for (GameEntity gameObject : Globals.gameObjects) gameObject.destroy();
         spawnEntities();
+        Globals.gameLoop.start();
     }
 
-    public static void gameOver(int length) {
+    public void gameOver(int length) {
         Stage gameOver = new Stage();
         gameOver.setTitle("Your game is over");
         Text text = new Text(50, 50, "Game over \nSnake's length: " + length);
         StackPane root = new StackPane();
         root.getChildren().add(text);
+
+        Button restart = new Button();
+        restart.setTranslateX(100);
+        restart.setTranslateY(100);
+        restart.setText("RESTART");
+        restart.setOnAction(e -> {
+            gameOver.close();
+            restartGame();
+        });
+
+        root.getChildren().add(restart);
+
+        Button exit = new Button();
+        exit.setTranslateX(-115);
+        exit.setTranslateY(100);
+        exit.setText("EXIT");
+        exit.setOnAction(e -> System.exit(0));
+        root.getChildren().add(exit);
+
         gameOver.setScene(new Scene(root, 300, 250));
         gameOver.show();
     }
