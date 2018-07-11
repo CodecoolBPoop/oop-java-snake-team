@@ -37,17 +37,20 @@ public class SnakeHead extends GameEntity implements Animatable {
     private Clip shotSound;
     private Clip shotSoundReverb;
     private int length = 0;
+    private int player;
 
 
-    public SnakeHead(Game game, Pane pane, int xc, int yc) {
+    public SnakeHead(Game game, Pane pane, int xc, int yc, int player) {
         super(pane);
         this.game = game;
+        this.player = player;
         mainPane = pane;
         setX(xc);
         setY(yc);
         health = 100;
         tail = this;
-        setImage(Globals.snakeHead);
+        if (player == 1) setImage(Globals.snakeHead);
+        else setImage(Globals.snakeHead2);
         pane.getChildren().add(this);
         try {
             this.openAudio();
@@ -80,32 +83,33 @@ public class SnakeHead extends GameEntity implements Animatable {
             dir += drunkAngle;
         }
 
-        if (Globals.leftKeyDown) {
+        if ((Globals.leftKeyDown && player == 1) || (Globals.AKeyDown && player == 2)) {
             dir = dir - turnRate;
         }
-        if (Globals.rightKeyDown) {
+        if ((Globals.rightKeyDown && player == 1) || (Globals.DKeyDown && player == 2)) {
             dir = dir + turnRate;
         }
 
-        if (Globals.spaceKeyDown) {
+        if ((Globals.downKeyDown && player == 1) || (Globals.SKeyDown && player == 2)) {
             this.shotTimer--;
             if (!this.imageChanged){
                 this.shotSound.loop(Clip.LOOP_CONTINUOUSLY);
                 setImage(Globals.snakeHeadShot);
                 this.imageChanged = true;
-                new Bullet(pane, getX(), getY(), getRotate());
+                new Bullet(pane, getX(), getY(), getRotate(), player);
             }
             if (this.shotTimer == 1)
-                new Bullet(pane, getX(), getY(), getRotate());
+                new Bullet(pane, getX(), getY(), getRotate(), player);
             else if (this.shotTimer == 0)
                 this.shotTimer = 5;
         }
-        else if (!Globals.spaceKeyDown && this.imageChanged) {
+        else if (this.imageChanged) {
             this.shotTimer = 5;
             this.shotSound.stop();
             this.shotSoundReverb.setMicrosecondPosition(0);
             this.shotSoundReverb.loop(1);
-            setImage(Globals.snakeHead);
+            if (player == 1) setImage(Globals.snakeHead);
+            else setImage(Globals.snakeHead2);
             this.imageChanged = false;
         }
 
@@ -148,7 +152,7 @@ public class SnakeHead extends GameEntity implements Animatable {
 
     public void addPart(int numParts) {
         for (int i = 0; i < numParts; i++) {
-            SnakeBody newPart = new SnakeBody(pane, tail);
+            SnakeBody newPart = new SnakeBody(pane, tail, player);
             tail = newPart;
             this.length++;
         }
@@ -165,4 +169,6 @@ public class SnakeHead extends GameEntity implements Animatable {
     public void speedUp() { this.speed = speedUpSpeed;}
 
     public void drunk() { this.drunkTimer = powerupTime;}
+
+    public int getPlayer() {return this.player; }
 }

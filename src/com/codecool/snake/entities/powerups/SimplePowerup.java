@@ -19,7 +19,6 @@ public class SimplePowerup extends GameEntity implements Interactable {
         Random rnd = new Random();
         setX(rnd.nextDouble() * Globals.WINDOW_WIDTH);
         setY(rnd.nextDouble() * Globals.WINDOW_HEIGHT);
-        setFitHeight(100);
     }
 
     @Override
