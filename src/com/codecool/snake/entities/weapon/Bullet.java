@@ -16,6 +16,8 @@ public class Bullet extends GameEntity implements Animatable, Interactable {
 
     private Point2D heading;
 
+    private SnakeHead thisSnake;
+
     public Bullet(Pane pane, double x, double y, double direction) {
         super(pane);
 

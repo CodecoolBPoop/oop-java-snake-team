@@ -1,4 +1,4 @@
-package com.codecool.snake.entities.powerups;
+package com.codecool.snake.entities.menu;
 
 import com.codecool.snake.entities.GameEntity;
 import com.codecool.snake.Globals;
@@ -9,27 +9,29 @@ import javafx.scene.layout.Pane;
 import java.util.Random;
 
 // a simple powerup that makes the snake grow TODO make other powerups
-public class SimplePowerup extends GameEntity implements Interactable {
+public class MultiPlayer extends GameEntity implements Interactable {
 
-    public SimplePowerup(Pane pane) {
+    private Pane pane;
+
+    public MultiPlayer(Pane pane) {
         super(pane);
-        setImage(Globals.powerupBerry);
+        this.pane = pane;
+        setImage(Globals.multiPlayer);
         pane.getChildren().add(this);
 
         Random rnd = new Random();
         setX(rnd.nextDouble() * Globals.WINDOW_WIDTH);
         setY(rnd.nextDouble() * Globals.WINDOW_HEIGHT);
-        setFitHeight(100);
     }
 
     @Override
     public void apply(SnakeHead snakeHead) {
-        snakeHead.addPart(4);
-        destroy();
+        Globals.isMultiplayer = true;
+        Globals.startGame.startGame();
     }
 
     @Override
     public String getMessage() {
-        return "Got power-up :)";
+        return "Multi Player";
     }
 }
