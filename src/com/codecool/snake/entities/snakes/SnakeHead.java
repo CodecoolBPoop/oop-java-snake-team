@@ -148,9 +148,18 @@ public class SnakeHead extends GameEntity implements Animatable {
     }
 
     public void dies() {
+        this.health = 0;
         this.destroy();
-        System.out.println("Player " + player + " died. Length: " + this.length);
         game.playerDied(this, length);
+        System.out.println("Player " + player + " died. Length: " + this.length);
+    }
+
+    public void destroy() {
+        if (getParent() != null) {
+            pane.getChildren().remove(this);
+        }
+        Globals.removeGameObject(this);
+        tail.destroy();
     }
 
     public void addPart(int numParts) {
