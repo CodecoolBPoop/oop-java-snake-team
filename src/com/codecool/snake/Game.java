@@ -28,9 +28,9 @@ import javax.sound.sampled.Clip;
 public class Game extends Pane {
 
     private double elapsedMillis;
-    private int numOfPlayers;
     private int player1length;
     private int player2length;
+    private int numOfPlayers;
     private int initNumOfPlayers;
 
     private void spawnEntities() {
@@ -191,10 +191,14 @@ public class Game extends Pane {
     }
 
     public void playerDied(SnakeHead player, int length) {
-        if (player.getPlayer() == 1) player1length = length;
-        else player2length = length;
-        numOfPlayers--;
-
+        if (player.getPlayer() == 1 && player1length == 0) {
+            player1length = length;
+            numOfPlayers--;
+        }
+        if (player.getPlayer() == 2 && player2length == 0) {
+            player2length = length;
+            numOfPlayers--;
+        }
         if (numOfPlayers == 0) gameOver();
     }
 
