@@ -30,6 +30,14 @@ public class Bullet extends GameEntity implements Animatable, Interactable {
 
     @Override
     public void step() {
+        for (GameEntity entity : Globals.getGameObjects()) {
+            if (getBoundsInParent().intersects(entity.getBoundsInParent())) {
+                if (entity instanceof Interactable) {
+                    Interactable interactable = (Interactable) entity;
+                    interactable.apply(this);
+                }
+            }
+        }
         if (isOutOfBounds()) {
             destroy();
         }

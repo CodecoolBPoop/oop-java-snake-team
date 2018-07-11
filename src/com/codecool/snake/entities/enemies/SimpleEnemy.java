@@ -6,6 +6,7 @@ import com.codecool.snake.entities.Animatable;
 import com.codecool.snake.Utils;
 import com.codecool.snake.entities.Interactable;
 import com.codecool.snake.entities.snakes.SnakeHead;
+import com.codecool.snake.entities.weapon.Bullet;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 
@@ -49,6 +50,10 @@ public class SimpleEnemy extends GameEntity implements Animatable, Interactable 
     @Override
     public void apply(SnakeHead player) {
         player.changeHealth(-damage);
+        destroy();
+    }
+
+    public void apply(Bullet bullet) {
         destroy();
     }
 
