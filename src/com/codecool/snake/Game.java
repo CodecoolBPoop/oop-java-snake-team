@@ -16,6 +16,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 
 public class Game extends Pane {
@@ -43,6 +46,17 @@ public class Game extends Pane {
     }
 
     void start() {
+
+        try{
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(getClass().getResource("/techno.wav"));
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.loop(-1);
+        }
+        catch (Exception e){
+            System.out.print("failed to load techno");
+        }
+
         spawnEntities();
         Scene scene = getScene();
         scene.setOnKeyPressed(event -> {
