@@ -30,7 +30,8 @@ public class Game extends Pane {
     private double elapsedMillis;
 
     private void spawnEntities() {
-        new SnakeHead(this, this, 500, 500);
+        new SnakeHead(this, this, 750, 500, 1);
+        new SnakeHead(this, this, 250, 500, 2);
 
         new SimpleEnemy(this);
         new SimpleEnemy(this);
@@ -73,8 +74,17 @@ public class Game extends Pane {
                 case RIGHT:
                     Globals.rightKeyDown = true;
                     break;
-                case SPACE:
-                    Globals.spaceKeyDown = true;
+                case DOWN:
+                    Globals.downKeyDown = true;
+                    break;
+                case A:
+                    Globals.AKeyDown = true;
+                    break;
+                case S:
+                    Globals.SKeyDown = true;
+                    break;
+                case D:
+                    Globals.DKeyDown = true;
                     break;
             }
         });
@@ -87,8 +97,17 @@ public class Game extends Pane {
                 case RIGHT:
                     Globals.rightKeyDown = false;
                     break;
-                case SPACE:
-                    Globals.spaceKeyDown = false;
+                case DOWN:
+                    Globals.downKeyDown = false;
+                    break;
+                case A:
+                    Globals.AKeyDown = false;
+                    break;
+                case S:
+                    Globals.SKeyDown = false;
+                    break;
+                case D:
+                    Globals.DKeyDown = false;
                     break;
                 case R:
                     restartGame();
@@ -140,7 +159,7 @@ public class Game extends Pane {
 
     public void gameOver(int length) {
         Stage gameOver = new Stage();
-        gameOver.setTitle("Your game is over");
+        gameOver.setTitle("GAME OVER!");
         Text text = new Text(50, 50, "Game over \nSnake's length: " + length);
         StackPane root = new StackPane();
         root.getChildren().add(text);
