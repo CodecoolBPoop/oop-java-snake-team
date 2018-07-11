@@ -20,6 +20,7 @@ import javax.swing.*;
 
 public class SnakeHead extends GameEntity implements Animatable {
 
+    private Game game;
     private static final float turnRate = 2;
     private static final int initialSpeed = 2;
     private static final int speedUpSpeed = 4;
@@ -38,8 +39,9 @@ public class SnakeHead extends GameEntity implements Animatable {
     private int length = 0;
 
 
-    public SnakeHead(Pane pane, int xc, int yc) {
+    public SnakeHead(Game game, Pane pane, int xc, int yc) {
         super(pane);
+        this.game = game;
         mainPane = pane;
         setX(xc);
         setY(yc);
@@ -128,9 +130,8 @@ public class SnakeHead extends GameEntity implements Animatable {
         if (isOutOfBounds() || health <= 0) {
             System.out.println("Game Over" + this.length);
             Globals.gameLoop.stop();
-            Game.gameOver(length);
-
-
+            this.destroy();
+            game.gameOver(length);
         }
 
         if ( this.speed != initialSpeed){
