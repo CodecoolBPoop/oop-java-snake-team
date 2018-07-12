@@ -190,6 +190,8 @@ public class Game extends Pane {
         new SnakeHead(this, this, 500, 500, 1);
         new SinglePlayer(this);
         new MultiPlayer(this);
+        player1length = 0;
+        player2length = 0;
         Globals.rightKeyDown = false;
         Globals.leftKeyDown = false;
         Globals.downKeyDown = false;

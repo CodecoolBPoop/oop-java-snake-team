@@ -44,7 +44,7 @@ public class SimpleEnemy extends GameEntity implements Animatable, Interactable 
     }
 
     private void bounceFromTopWalls() {
-        direction = direction * 2;
+        direction = 180 - direction;
         setRotate(direction);
         heading = Utils.directionToVector(direction, speed);
     }

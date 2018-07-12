@@ -27,6 +27,7 @@ public class Globals {
     public static Image powerupLife = new Image("powerup_life.png");
     public static Image powerupDrunk = new Image("powerup_drunk.png");
     public static Image bullet = new Image("bullet.png");
+    public static Image laserBullet = new Image("laser_bullet.png");
     public static Image singlePlayer = new Image("single_player.png");
     public static Image multiPlayer = new Image("multi_player.png");
     public static Image snakeHead2 = new Image("snake_head2.png");
