@@ -148,9 +148,11 @@ public class SnakeHead extends GameEntity implements Animatable {
     }
 
     public void dies() {
+
         this.health = 0;
-        this.destroy();
+        this.shotSound.stop();
         game.playerDied(this, length);
+        this.destroy();
         System.out.println("Player " + player + " died. Length: " + this.length);
     }
 

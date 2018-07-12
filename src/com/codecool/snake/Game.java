@@ -181,6 +181,8 @@ public class Game extends Pane {
         spawnEntities();
         if (initNumOfPlayers == 2) spawnPlayerTwo();
         numOfPlayers = initNumOfPlayers;
+        player1length = 0;
+        player2length = 0;
         Globals.rightKeyDown = false;
         Globals.leftKeyDown = false;
         Globals.downKeyDown = false;
