@@ -21,6 +21,7 @@ public class Globals {
     public static Image snakeBody = new Image("snake_body.png");
     public static Image simpleEnemy = new Image("simple_enemy.png");
     public static Image explodingEnemy = new Image ("exploding_enemy.png");
+    public static Image speedEnemy = new Image("speed_enemy.png");
     public static Image powerupBerry = new Image("powerup_berry.png");
     public static Image powerupSpeed = new Image("powerup_speed.png");
     public static Image powerupLife = new Image("powerup_life.png");
@@ -43,7 +44,6 @@ public class Globals {
     public static List<GameEntity> oldGameObjects; // Holds game objects that will be destroyed this frame.
     public static GameLoop gameLoop;
     public static Game startGame;
-
     public static boolean isMultiplayer = false;
 
     static {

@@ -4,7 +4,8 @@ import com.codecool.snake.entities.GameEntity;
 import com.codecool.snake.entities.Animatable;
 import com.codecool.snake.entities.snakes.SnakeHead;
 import javafx.animation.AnimationTimer;
-import javafx.scene.layout.Pane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.scene.text.*;
 
 public class GameLoop extends AnimationTimer {
@@ -15,6 +16,11 @@ public class GameLoop extends AnimationTimer {
     GameLoop(Pane pane) {
         this.pane = pane;
         initTexts();
+        BackgroundImage myBI= new BackgroundImage(new Image("background.gif",Globals.WINDOW_WIDTH,Globals.WINDOW_HEIGHT,false,true),
+                BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT);
+//then you set to your node
+        pane.setBackground(new Background(myBI));
     }
 
     private void initTexts() {
