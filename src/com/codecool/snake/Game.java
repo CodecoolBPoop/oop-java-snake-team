@@ -3,6 +3,7 @@ package com.codecool.snake;
 import com.codecool.snake.entities.GameEntity;
 import com.codecool.snake.entities.enemies.ExplodingEnemy;
 import com.codecool.snake.entities.enemies.SimpleEnemy;
+import com.codecool.snake.entities.enemies.SpeedEnemy;
 import com.codecool.snake.entities.menu.MultiPlayer;
 import com.codecool.snake.entities.menu.SinglePlayer;
 import com.codecool.snake.entities.powerups.DrunkPowerup;
@@ -42,6 +43,8 @@ public class Game extends Pane {
         new SimpleEnemy(this);
 
         new ExplodingEnemy(this);
+
+        new SpeedEnemy(this);
 
         new SimplePowerup(this);
         new SimplePowerup(this);
@@ -174,6 +177,9 @@ public class Game extends Pane {
         if (elapsedMillis % Utils.getRandomNumber(2000, 8000) == 0) {
             new SimpleEnemy(this);
         }
+        if (elapsedMillis % Utils.getRandomNumber(2000, 8000) == 0) {
+            new SpeedEnemy(this);
+        }
     }
 
     private void restartGame() {
@@ -181,6 +187,9 @@ public class Game extends Pane {
         spawnEntities();
         if (initNumOfPlayers == 2) spawnPlayerTwo();
         numOfPlayers = initNumOfPlayers;
+        new SnakeHead(this, this, 500, 500, 1);
+        new SinglePlayer(this);
+        new MultiPlayer(this);
         player1length = 0;
         player2length = 0;
         Globals.rightKeyDown = false;
