@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 
 public class Laser extends GameEntity implements Animatable, Interactable {
     private Point2D heading;
+    private int player;
 
     public Laser(Pane pane, double x, double y, double direction) {
         super(pane);
@@ -42,12 +43,15 @@ public class Laser extends GameEntity implements Animatable, Interactable {
     }
 
     @Override
-    public void apply(SnakeHead player) {
-        System.out.print("valami");
+    public void apply(SnakeHead snakeHead) {
+        if (snakeHead.getPlayer() != player) {
+            snakeHead.changeHealth(-1);
+        this.destroy();
+        }
     }
 
     @Override
     public String getMessage() {
-        return "shot";
+        return "Shot by player " + player;
     }
 }
