@@ -13,15 +13,15 @@ public class MultiPlayer extends GameEntity implements Interactable {
 
     private Pane pane;
 
-    public MultiPlayer(Pane pane) {
+    public MultiPlayer(Pane pane, int x, int y) {
         super(pane);
         this.pane = pane;
         setImage(Globals.multiPlayer);
         pane.getChildren().add(this);
 
         Random rnd = new Random();
-        setX(rnd.nextDouble() * Globals.WINDOW_WIDTH);
-        setY(rnd.nextDouble() * Globals.WINDOW_HEIGHT);
+        setX(x);
+        setY(y);
     }
 
     @Override

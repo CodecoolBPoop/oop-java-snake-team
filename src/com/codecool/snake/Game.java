@@ -127,9 +127,9 @@ public class Game extends Pane {
             }
         });
 
-        new SnakeHead(this, this, 500, 500, 1);
-        new SinglePlayer(this);
-        new MultiPlayer(this);
+        new SnakeHead(this, this, 500, 650, 1);
+        new SinglePlayer(this, 150, 200);
+        new MultiPlayer(this, 650, 180);
         Globals.gameLoop = new GameLoop(this);
         Globals.gameLoop.start();
     }
@@ -180,6 +180,9 @@ public class Game extends Pane {
         if (elapsedMillis % Utils.getRandomNumber(2000, 8000) == 0) {
             new SpeedEnemy(this);
         }
+        if (elapsedMillis % Utils.getRandomNumber(4000, 12000) == 0) {
+            new ExplodingEnemy(this);
+        }
     }
 
     private void restartGame() {
@@ -187,9 +190,6 @@ public class Game extends Pane {
         spawnEntities();
         if (initNumOfPlayers == 2) spawnPlayerTwo();
         numOfPlayers = initNumOfPlayers;
-        new SnakeHead(this, this, 500, 500, 1);
-        new SinglePlayer(this);
-        new MultiPlayer(this);
         player1length = 0;
         player2length = 0;
         Globals.rightKeyDown = false;

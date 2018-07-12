@@ -16,7 +16,7 @@ public class GameLoop extends AnimationTimer {
     GameLoop(Pane pane) {
         this.pane = pane;
         initTexts();
-        BackgroundImage myBI= new BackgroundImage(new Image("background.gif",Globals.WINDOW_WIDTH,Globals.WINDOW_HEIGHT,false,true),
+        BackgroundImage myBI= new BackgroundImage(new Image("background.jpg",Globals.WINDOW_WIDTH,Globals.WINDOW_HEIGHT,false,true),
                 BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                 BackgroundSize.DEFAULT);
 //then you set to your node
@@ -25,12 +25,12 @@ public class GameLoop extends AnimationTimer {
 
     private void initTexts() {
         player1Health.setFontSmoothingType(FontSmoothingType.LCD);
-        player1Health.setFont(Font.font("verdana", FontPosture.REGULAR, 16));
-        player1Health.setX(850);
+        player1Health.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+        player1Health.setX(810);
         player1Health.setY(20);
 
         player2Health.setFontSmoothingType(FontSmoothingType.LCD);
-        player2Health.setFont(Font.font("verdana", FontPosture.REGULAR, 16));
+        player2Health.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
         player2Health.setX(10);
         player2Health.setY(20);
     }

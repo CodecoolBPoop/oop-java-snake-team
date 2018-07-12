@@ -6,6 +6,7 @@ import com.codecool.snake.entities.Animatable;
 import com.codecool.snake.Utils;
 import com.codecool.snake.entities.Interactable;
 import com.codecool.snake.entities.snakes.SnakeHead;
+import com.codecool.snake.entities.weapon.Bullet;
 import com.codecool.snake.entities.weapon.Laser;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -107,6 +108,10 @@ public class ExplodingEnemy extends GameEntity implements Animatable, Interactab
             snakeHead.changeHealth(-1);
             this.destroy();
         }
+    }
+
+    public void apply(Bullet bullet) {
+        destroy();
     }
 
     @Override
